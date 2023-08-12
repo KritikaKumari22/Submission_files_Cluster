@@ -1,0 +1,1 @@
+python3 calc_depth.py 98_redownded_cleanPDBS.txt ./depth_db_origs/ 98_redownded_cleanPDBS.txt
