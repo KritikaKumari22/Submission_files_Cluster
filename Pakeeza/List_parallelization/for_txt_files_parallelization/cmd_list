@@ -1,0 +1,1 @@
+python calc_depth.py xaa ./depth_db/ xaa
