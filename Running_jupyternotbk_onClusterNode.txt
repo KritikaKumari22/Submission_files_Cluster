@@ -1,0 +1,82 @@
+Please find below the information required for running Jupyter Notebook on Pakeeza's SGE GPU nodes interactively on any local Browser.
+(This script can be modified according the Schedulaer of your cluster, and will also function for CPU Clusters)
+
+The submission script-
+
+#!/bin/bash -l
+#$ -S /bin/bash
+#$ -cwd
+#$ -V
+#$ -N Jup_notbk
+#$ -l gpu=1
+##################$ -pe mpirun 32
+#$ -j y
+#$ -o notbk_log.out
+########################$ -q all.q
+#$ -q all.q@gpunode-57
+
+
+echo "Starting MPI job at: " `date`
+echo "Starting MPI job on: " `hostname`
+echo "Total cores demanded: " $NSLOTS
+echo "Job name given: " $JOB_NAME
+echo "Job ID: " $JOB_ID
+echo "Starting MPI job..."
+
+conda activate /home/thattai/kritikak/.conda/envs/KK
+
+## Change the executable to match your path and executable filename (last line with ./xxx)
+#python t.py
+
+jupyter lab --ip=0.0.0.0 --port=8889
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+When running another Jupyter Notebook Concurrently, the Port must be specified different, or else the output link will lead to the same initial Running Notebook.
+
+To run on Nargis CPU Cluster-
+
+#!/bin/bash -l
+#$ -S /bin/bash
+#$ -cwd
+#$ -V
+#$ -N Jup_notbk
+#$ -j y
+#$ -o notbk_log.out
+########################$ -q all.q
+#$ -q all.q@compute-0-8.local 
+
+
+echo "Starting MPI job at: " `date`
+echo "Starting MPI job on: " `hostname`
+echo "Total cores demanded: " $NSLOTS
+echo "Job name given: " $JOB_NAME
+echo "Job ID: " $JOB_ID
+echo "Starting MPI job..."
+
+conda activate /home/thattai/kritikak/.conda/envs/KK
+
+jupyter lab --ip=0.0.0.0 --port=8889
+
+
+------------------------------------------------------------------------------------------------------------------------------
+
+
+Next Step -
+
+Now once you've submitted the above script and it has started running, the error out file, here named notbk_log.out, will have the lines indicating upon which GPU node among the 62 GPU nodes on Pakeeza the Jupyter Notebook is running. Note this GPU id as: gpunode-<index of the GPU> (e.g.- gpunode-47)
+
+Note that this gpunode-<#> can be observed from the qstat command to check the job's node as well.
+
+At the end of the log file, there will be certain URLs that you will require to load in a browser to run the Jupyter Notebook Interface; a Browser is required because Jupyter Notebooks use Javascript to compile and run the interactive interface. Note the URL that looks like - "http://127.0.0.1:8888/lab?token=bb38c9fa7fe3ddd6d3db41b7465285a732091ca3538dd8a2" , it would probably be the last URL provided.
+
+Now open another command prompt and login into the gpunode on which the notebook is running with the following flanking string-
+
+ssh -L8888:<gpunode-<#>>:8888 <username>@pakeeza
+
+Now all you need to do is load the URL copied from the error out file and load it in any browser. 
+
+There is no maximum time specification for the Job submitted, so it will run until the Cluster lets it run before killing (which  I gather is greater than the duration of a week). However, there is a memory(RAM) limit to each of the GPU nodes on Pakeeza, which is- 251.6G.
+
+This process is based on the documentation- https://nero-docs.stanford.edu/jupyter-slurm.html. I thank my former mentor from IISER Pune- S. Mukundan, for introducing it to me.

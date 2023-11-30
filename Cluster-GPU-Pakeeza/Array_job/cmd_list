@@ -1,0 +1,2 @@
+python call_soluscrpt.py GRAPH_DICTIONARY_KEYS_3_comp_3_coats_inhib_test.pkl ./Results/
+python call_soluscrpt.py /home/thattai/kritikak/Graph_solus/3_comp_3ct/top_3_comp_13_to_18/chunk_top_permus_3_comp_13_3coats_1.pkl ./Results/

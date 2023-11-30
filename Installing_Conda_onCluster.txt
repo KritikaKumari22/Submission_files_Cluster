@@ -1,0 +1,13 @@
+Following is the way to install Miniconda on the cluster-
+
+Go to the Conda webpage and download the latest version of Miniconda for Linux 64-bit system because our cluster has x86_64 intel processors; it will be .sh script: https://docs.conda.io/en/latest/miniconda.html#linux-installers
+Transfer the <miniconda-installer>.sh script to cluster and use the following command to convert it into an executable file -
+chmod x+ <miniconda-installer>.sh
+Then run the script using: ./<miniconda-installer>.sh
+Note that the conda is installed inside your own directory and therefore to prevent calling onto the existing version of conda on Nargis call the conda which is installed in your directory by specifying path like this - /home/thattai/<your_dir_name>/miniconda3/bin/conda
+check if conda is installed using:  /home/thattai/<your_dir_name>/miniconda3/bin/conda   --version 
+To activate newly installed Conda do: /home/thattai/<your_directory_name>/miniconda3/bin/conda init bash
+Then logout and login again. Now we can create our own environment by using the specific /<directory>/conda call and install packages.
+
+
+In the bash submission script, change the module load version of conda from the Cluster's conda to the conda you've installed (/<directory>/conda)  and then source activate your new environment. The rest is identical. 
